@@ -13,6 +13,4 @@ def and_another_handler(request):
 app.add_route(Rule('/a', endpoint=a_handler))
 
 
-
-app.run()
 app.serve(debug=True, use_reloader=True)

@@ -16,8 +16,8 @@ def render_template(template, context={}):
 
 
 class Micronic(object):
-    def __init__(self, rules=[]):
-        self.rules = rules
+    def __init__(self):
+        self.routes = Map([])
 
     def __call__(self, env, start_response):
         return self.wsgi_app(env, start_response)
@@ -29,7 +29,7 @@ class Micronic(object):
 
 
     def dispatch(self, request):
-        adapter = self.url_map.bind_to_environ(request.environ)
+        adapter = self.routes.bind_to_environ(request.environ)
         try:
             endpoint, values = adapter.match()
             return endpoint(request, **values)
@@ -37,7 +37,7 @@ class Micronic(object):
             return e
     
     def add_route(self, rule):
-        self.rules.append(rule)
+        self.routes.add(rule)
 
     def route(self, path, **kwargs):
         def wrapper(fun):
@@ -46,9 +46,6 @@ class Micronic(object):
                 return fun(*args, **kwargs)
             return decorated
         return wrapper
-
-    def run(self):
-        self.url_map = Map(self.rules)
 
     def serve(self, debug=False, use_reloader=False):
         from werkzeug.serving import run_simple
