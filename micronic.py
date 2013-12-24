@@ -47,7 +47,7 @@ class Micronic(object):
             return decorated
         return wrapper
 
-    def run(self, debug=False, use_reloader=False):
+    def run(self):
         self.url_map = Map(self.rules)
 
     def serve(self, debug=False, use_reloader=False):
