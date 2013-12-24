@@ -27,7 +27,6 @@ class Micronic(object):
         response = self.dispatch(request)
         return response(env, start_response)
 
-
     def dispatch(self, request):
         adapter = self.routes.bind_to_environ(request.environ)
         try:
@@ -36,12 +35,12 @@ class Micronic(object):
         except HTTPException, e:
             return e
     
-    def add_route(self, rule):
-        self.routes.add(rule)
+    def add_route(self, route, **kwargs):
+        self.routes.add(Rule(route[0], endpoint=route[1], **kwargs))
 
     def route(self, path, **kwargs):
         def wrapper(fun):
-            self.add_route(Rule(path, endpoint=fun))
+            self.add_route((path, fun), **kwargs)
             def decorated(*args, **kwargs):
                 return fun(*args, **kwargs)
             return decorated

@@ -1,4 +1,4 @@
-from micronic import Micronic, Response, Rule, render_template
+from micronic import Micronic, Response, render_template
 
 app = Micronic()
 
@@ -10,7 +10,7 @@ def and_another_handler(request):
     return Response("From and_another_handler")
 
 
-app.add_route(Rule('/a', endpoint=a_handler))
+app.add_route(('/a', a_handler))
 
 
 app.serve(debug=True, use_reloader=True)
